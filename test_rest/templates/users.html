@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+        <h1>Users data</h1>
+        <div id="placeholder" style="width:1200px;height:600px"></div>
+        <div class="demo-container">
+            <div id="placeholder" class="demo-placeholder" style="float:left; width:675px;"></div>
+            <p id="choices" style="float:right; width:135px;"></p>
+        </div>
+        <script>
+        $(function() {
+            var datasets = {
+                "female": {
+                    label: "female",
+                    data: {{ users.0 }}
+                },
+                "male": {
+                    label: "male",
+                    data: {{ users.1 }}
+                },
+                // "weighted female": {
+                //     label: "weighted female",
+                //     data: {{ users.3 }}
+                // },
+                // "weighted male": {
+                //     label: "weighted male",
+                //     data: {{ users.4 }}
+                // },
+                "census" : {
+                    label: "census",
+                    data: {{ users.6}}
+                }
+                // "unk": {
+                //     label: "unk",
+                //     data: {{ users.2 }}
+                // },
+                // "weighted unk": {
+                //     label: "weighted unk",
+                //     data: {{ users.5 }}
+                // },
+            };
+
+            var i = 0;
+            $.each(datasets, function(key, val) {
+                val.color = i;
+                ++i;
+            });
+
+            // insert checkboxes 
+            var choiceContainer = $("#choices");
+            $.each(datasets, function(key, val) {
+                choiceContainer.append("<br/><input type='checkbox' name='" + key +
+                    "' checked='checked' id='id" + key + "'></input>" +
+                    "<label for='id" + key + "'>"
+                    + val.label + "</label>");
+            });
+
+            choiceContainer.find("input").click(plotAccordingToChoices);
+
+            function plotAccordingToChoices() {
+
+                var data = [];
+
+                choiceContainer.find("input:checked").each(function () {
+                    var key = $(this).attr("name");
+                    if (key && datasets[key]) {
+                        data.push(datasets[key]);
+                    }
+                });
+
+                if (data.length > 0) {
+                    $.plot("#placeholder", data, {
+                        yaxis: {
+                            min: 0
+                        },
+                        xaxis: {
+                            tickDecimals: 0,
+                            max: 90,
+                            title: 'years'
+                        }
+                    });
+                }
+            }
+
+            plotAccordingToChoices();
+
+            // Add the Flot version string to the footer
+
+            $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+        });
+        </script>
+{% endblock %}

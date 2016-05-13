@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load leaflet_tags %}
+{% load geojson_tags %}
+<html lang="en">
+<head>
+    {% block head %}
+        <link rel="stylesheet" type="text/css" href="{% static 'test_rest/style.css' %}" />
+        <title>{% block title %}Geodjango test site{% endblock %}</title>
+        <meta charset=utf-8 />
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <script src="static/flot/jquery.flot.js"></script>
+        {% leaflet_js %}
+        {% leaflet_css %}
+        <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+        
+    {% endblock %}
+</head>
+
+<body>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

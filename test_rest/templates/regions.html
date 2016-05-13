@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load leaflet_tags %}
+{% load geojson_tags %}
+
+{% block title %}Regions map{% endblock %}
+
+{% block content %}   
+    <h1>User map</h1>
+    <div id="map"></div>
+    <script>
+        L.mapbox.accessToken = 'pk.eyJ1IjoibWFsaXJvYm90IiwiYSI6ImNpbzFiNjBxdzAweDB2ZGx5ZmZpcWI5bHcifQ.3SFCcB7fsijEQlhKw4D0Zw';
+        // Replace 'mapbox.streets' with your map id.
+        var mapboxTiles = L.tileLayer('https://api.mapbox.com/styles/v1/malirobot/cio1b72ft004xcbm95bdwcmzp/tiles/{z}/{x}/{y}?access_token=' + L.mapbox.accessToken, {
+            attribution: '© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+
+        var map = L.map('map')
+            .addLayer(mapboxTiles)
+            .setView([42.3610, -71.0587], 4);
+        var collection = {{ data|geojsonfeature|safe }};
+        L.geoJson(collection).addTo(map);
+    </script>
+{% endblock  %}

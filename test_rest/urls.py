@@ -23,6 +23,7 @@ urlpatterns = [
 	url(r'^countries$', views.countries, name='data'),
 	url(r'^regions$', views.regions, name='data'),
 	url(r'^districts$', views.districts, name='data'),
+    url(r'^weighted_users$', views.percentage_plot, name='stats'),
 	url(r'^territory/(?P<reg_id>[0-9]+)$', views.territory, name='territory'),
 	url(r'', views.index, name='index'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

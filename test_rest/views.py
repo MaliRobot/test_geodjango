@@ -69,4 +69,35 @@ def user_plot(request):
 
 	users = [female, male, unk, w_fem, w_mal, w_unk, census]
 	return render(request, 'users.html', {'users':users})
+
+def percentage_plot(request):
+	population_percent = [[x, 100*(ages_uk[x]/ages_uk['all'])] for x in ages_uk if x != 'all']
+	users = User.objects.all()
+	users_number = len(users)
+	users_age = [x.age for x in users]
+
+	users_age = Counter(users_age)
+	users_age = [[key, value] for key, value in users_age.items() if 0 <= key <= 90]
+	users_percent = [[x[0], 100*(x[1]/users_number)] for x in users_age]
+
+	for i in range(91):
+		if i not in [x[0] for x in users_age]:
+			users_age.append([i, 0])
+	users_age.sort(key=lambda x: x[0])
+
+	weighted_users = []
+	for i in range(len(population_percent)):
+		try:
+			weighted_users.append([population_percent[i][0], int((population_percent[i][1]/users_percent[i][1])*users_age[i][1])])
+		except IndexError:
+			weighted_users.append([population_percent[i][0], 0])
+
+
+	stats = [users_age, weighted_users]
+	return render(request, 'weighted_users.html', {'stats':stats})
+
+
+
+
+	
 	
